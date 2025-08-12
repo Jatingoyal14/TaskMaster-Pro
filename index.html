@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Todo App</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Section -->
+    <header class="app-header">
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1 class="app-title">
+                        <i class="fas fa-tasks"></i>
+                        TaskMaster Pro
+                    </h1>
+                </div>
+                <div class="header-center">
+                    <div class="stats-container">
+                        <div class="stat-item">
+                            <span class="stat-value" id="totalTodos">0</span>
+                            <span class="stat-label">Total</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="completedTodos">0</span>
+                            <span class="stat-label">Completed</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="pendingTodos">0</span>
+                            <span class="stat-label">Pending</span>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progressFill"></div>
+                            </div>
+                            <span class="progress-text" id="progressText">0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="btn btn--secondary theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <button class="btn btn--outline export-btn" id="exportBtn">
+                        <i class="fas fa-download"></i>
+                        Export
+                    </button>
+                    <button class="btn btn--outline import-btn" id="importBtn">
+                        <i class="fas fa-upload"></i>
+                        Import
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container main-content">
+        <!-- Add Todo Form -->
+        <section class="add-todo-section">
+            <div class="card">
+                <div class="card__body">
+                    <h2>Add New Task</h2>
+                    <form id="todoForm" class="todo-form">
+                        <div class="form-row">
+                            <div class="form-group flex-2">
+                                <label for="todoTitle" class="form-label">Task Title *</label>
+                                <input type="text" id="todoTitle" class="form-control" placeholder="Enter task title" required>
+                            </div>
+                            <div class="form-group flex-1">
+                                <label for="todoPriority" class="form-label">Priority</label>
+                                <select id="todoPriority" class="form-control">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                            <div class="form-group flex-1">
+                                <label for="todoDueDate" class="form-label">Due Date</label>
+                                <input type="date" id="todoDueDate" class="form-control">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="todoDescription" class="form-label">Description</label>
+                            <textarea id="todoDescription" class="form-control" rows="2" placeholder="Enter task description (optional)"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn--primary">
+                            <i class="fas fa-plus"></i>
+                            Add Task
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Controls Section -->
+        <section class="controls-section">
+            <div class="controls-container">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <i class="fas fa-search search-icon"></i>
+                        <input type="text" id="searchInput" class="form-control search-input" placeholder="Search tasks...">
+                        <button id="clearSearch" class="clear-search" style="display: none;">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="filter-controls">
+                    <div class="filter-group">
+                        <label class="filter-label">Status:</label>
+                        <select id="statusFilter" class="form-control filter-select">
+                            <option value="all">All</option>
+                            <option value="active">Active</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Priority:</label>
+                        <select id="priorityFilter" class="form-control filter-select">
+                            <option value="all">All</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label class="filter-label">Sort by:</label>
+                        <select id="sortSelect" class="form-control filter-select">
+                            <option value="createdAt">Created Date</option>
+                            <option value="dueDate">Due Date</option>
+                            <option value="priority">Priority</option>
+                            <option value="title">Title</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Todo List Section -->
+        <section class="todo-list-section">
+            <div class="list-header">
+                <div class="bulk-controls">
+                    <input type="checkbox" id="selectAll" class="bulk-checkbox">
+                    <label for="selectAll" class="bulk-label">Select All</label>
+                    <div class="bulk-actions" id="bulkActions" style="display: none;">
+                        <button class="btn btn--sm btn--secondary" id="bulkComplete">
+                            <i class="fas fa-check"></i>
+                            Complete Selected
+                        </button>
+                        <button class="btn btn--sm btn--secondary" id="bulkIncomplete">
+                            <i class="fas fa-undo"></i>
+                            Mark Incomplete
+                        </button>
+                        <button class="btn btn--sm btn--outline" id="bulkDelete">
+                            <i class="fas fa-trash"></i>
+                            Delete Selected
+                        </button>
+                    </div>
+                </div>
+                <div class="view-toggle">
+                    <button class="view-btn active" id="listView" data-view="list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                    <button class="view-btn" id="gridView" data-view="grid">
+                        <i class="fas fa-th"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="todoList" class="todo-list">
+                <!-- Todos will be rendered here -->
+            </div>
+            
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-tasks empty-icon"></i>
+                <h3>No tasks found</h3>
+                <p>Add your first task or adjust your filters to see tasks here.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for Edit Todo -->
+    <div id="editModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Task</h3>
+                <button class="modal-close" id="closeModal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="editTitle" class="form-label">Task Title *</label>
+                        <input type="text" id="editTitle" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="editPriority" class="form-label">Priority</label>
+                            <select id="editPriority" class="form-control">
+                                <option value="low">Low</option>
+                                <option value="medium">Medium</option>
+                                <option value="high">High</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="editDueDate" class="form-label">Due Date</label>
+                            <input type="date" id="editDueDate" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDescription" class="form-label">Description</label>
+                        <textarea id="editDescription" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--secondary" id="cancelEdit">Cancel</button>
+                        <button type="submit" class="btn btn--primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="confirmTitle">Confirm Action</h3>
+            </div>
+            <div class="modal-body">
+                <p id="confirmMessage">Are you sure you want to perform this action?</p>
+                <div class="modal-actions">
+                    <button class="btn btn--secondary" id="confirmCancel">Cancel</button>
+                    <button class="btn btn--primary" id="confirmOk">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- File Input for Import -->
+    <input type="file" id="fileInput" accept=".json" style="display: none;">
+
+    <script src="app.js"></script>
+</body>
+</html>
