@@ -1,6 +1,6 @@
 ***
 
-# 📋 Advanced Todo Application
+# 📋 TaskMaster-Pro Advanced Todo Application
 
 An **interactive, fully-featured Todo Application** built with **HTML, CSS, and JavaScript**, designed to showcase professional coding standards and modern development practices.  
 This project is **interview-ready** and demonstrates skills in **frontend development, UI/UX, state management, and clean architecture**.
